@@ -12,41 +12,31 @@
 
 #include "get_next_line.h"
 
-char	*ft_strjoin(char *left_str, char *buff);
-
-char	*ft_strchr(char *s, int c);
-
-size_t	ft_strlen(char *s);
-
-char	*get_line(char *left_str);
-
-char	*newleft_str(char *left_str);
-
-char	*ft_strjoin(char *left_str, char *buff)
+char	*ft_strjoin(char *s1, char *buff)
 {
 	size_t	i;
 	size_t	j;
 	char	*str;
 
-	if (!left_str)
+	if (!s1)
 	{
-		left_str = (char *)malloc(1 * sizeof(char));
-		left_str[0] = '\0';
+		s1 = (char *)malloc(1 * sizeof(char));
+		s1[0] = '\0';
 	}
-	if (!left_str || !buff)
+	if (!s1 || !buff)
 		return (NULL);
-	str = malloc(sizeof(char) * ((ft_strlen(left_str) + ft_strlen(buff)) + 1));
+	str = malloc(sizeof(char) * ((ft_strlen(s1) + ft_strlen(buff)) + 1));
 	if (str == NULL)
 		return (NULL);
 	i = -1;
 	j = 0;
-	if (left_str)
-		while (left_str[++i] != '\0')
-			str[i] = left_str[i];
+	if (s1)
+		while (s1[++i] != '\0')
+			str[i] = s1[i];
 	while (buff[j] != '\0')
 		str[i++] = buff[j++];
-	str[ft_strlen(left_str) + ft_strlen(buff)] = '\0';
-	free(left_str);
+	str[ft_strlen(s1) + ft_strlen(buff)] = '\0';
+	free(s1);
 	return (str);
 }
 
@@ -80,56 +70,56 @@ size_t	ft_strlen(char *s)
 	return (i);
 }
 
-char	*get_line(char *left_str)
+char	*get_n_cut(char *overflow)
 {
 	int		i;
-	char	*str;
+	char	*line;
 
 	i = 0;
-	if (!left_str[i])
+	if (!overflow[i])
 		return (NULL);
-	while (left_str[i] && left_str[i] != '\n')
+	while (overflow[i] && overflow[i] != '\n')
 		i++;
-	str = (char *)malloc(sizeof(char) * (i + 2));
-	if (!str)
+	line = (char *)malloc(sizeof(char) * (i + 1));
+	if (!line)
 		return (NULL);
 	i = 0;
-	while (left_str[i] && left_str[i] != '\n')
+	while (overflow[i] && overflow[i] != '\n')
 	{
-		str[i] = left_str[i];
+		line[i] = overflow[i];
 		i++;
 	}
-	if (left_str[i] == '\n')
+	if (overflow[i] == '\n')
 	{
-		str[i] = left_str[i];
+		line[i] = overflow[i];
 		i++;
 	}
-	str[i] = '\0';
-	return (str);
+	line[i] = '\0';
+	return (line);
 }
 
-char	*newleft_str(char *left_str)
+char	*ow_in_newstr(char *overflow)
 {
 	int		i;
 	int		j;
-	char	*str;
+	char	*new_ow;
 
 	i = 0;
-	while (left_str[i] && left_str[i] != '\n')
+	while (overflow[i] && overflow[i] != '\n')
 		i++;
-	if (!left_str[i])
+	if (!overflow[i])
 	{
-		free (left_str);
+		free (overflow);
 		return (NULL);
 	}
-	str = (char *)malloc(sizeof(char) * (ft_strlen(left_str) - i + 1));
-	if (!str)
+	new_ow = (char *)malloc(sizeof(char) * (ft_strlen(overflow) - i + 1));
+	if (!new_ow)
 		return (NULL);
 	i++;
 	j = 0;
-	while (left_str[i])
-		str[j++] = left_str[i++];
-	str[j] = '\0';
-	free (left_str);
-	return (str);
+	while (overflow[i])
+		new_ow[j++] = overflow[i++];
+	new_ow[j] = '\0';
+	free (overflow);
+	return (new_ow);
 }

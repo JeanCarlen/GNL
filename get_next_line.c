@@ -13,9 +13,7 @@
 
 char	*get_next_line(int fd);
 
-char	*read_str(int fd, char *left_str);
-
-char	*read_str(int fd, char *left_str)
+char	*get_buffer(int fd, char *overflow)
 {
 	char	*buff;
 	int		rd_bytes;
@@ -24,36 +22,35 @@ char	*read_str(int fd, char *left_str)
 	if (!buff)
 		return (NULL);
 	rd_bytes = 1;
-	while (!ft_strchr(left_str, '\n') && rd_bytes != 0)
+	while (!ft_strchr(overflow, '\n') && rd_bytes != 0)
 	{
 		rd_bytes = read(fd, buff, BUFFER_SIZE);
-		if (rd_bytes == -1)
+		if (rd_bytes < 0)
 		{
 			free (buff);
 			return (NULL);
 		}
 		buff[rd_bytes] = '\0';
-		left_str = ft_strjoin(left_str, buff);
+		overflow = ft_strjoin(overflow, buff);
 	}
 	free (buff);
-	return (left_str);
+	return (overflow);
 }
 
 char	*get_next_line(int fd)
 {
 	char			*line;
-	static char		*left_str;
+	static char		*overflow;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (0);
-	left_str = read_str(fd, left_str);
-	if (!left_str)
+	overflow = get_buffer(fd, overflow);
+	if (!overflow)
 		return (NULL);
-	line = get_line(left_str);
-	left_str = newleft_str(left_str);
+	line = get_n_cut(overflow);
+	overflow = ow_in_newstr(overflow);
 	return (line);
 }
-
 /*
 int	main(void)
 {
@@ -62,17 +59,18 @@ int	main(void)
 	int		fd1;
 	int		fd2;
 	int		fd3;
-	fd1 = open("tests/test.txt", O_RDONLY);
+
+	fd1 = open("tests/test1.txt", O_RDONLY);
 	fd2 = open("tests/test2.txt", O_RDONLY);
 	fd3 = open("tests/test3.txt", O_RDONLY);
 	i = 1;
-	while (i < 7)
+	while (i < 11)
 	{
 		line = get_next_line(fd1);
-		printf("line [%02d]: %s", i, line);
+		printf("\n line [%02d]: %s", i, line);
 		free(line);
 		line = get_next_line(fd2);
-		printf("line [%02d]: %s", i, line);
+		printf("\n line [%02d]: %s", i, line);
 		free(line);
 		line = get_next_line(fd3);
 		printf("line [%02d]: %s", i, line);
@@ -83,4 +81,5 @@ int	main(void)
 	close(fd2);
 	close(fd3);
 	return (0);
-}*/
+}
+*/
