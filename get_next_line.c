@@ -3,17 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcarlen <marvin@42lausanne.ch>             +#+  +:+       +#+        */
+/*   By: jeancarlen <jeancarlen@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 11:57:30 by jcarlen           #+#    #+#             */
-/*   Updated: 2021/11/16 11:57:34 by jcarlen          ###   ########.fr       */
+/*   Updated: 2022/02/11 02:08:53 by jeancarlen       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "get_next_line.h"
 
 char	*get_next_line(int fd);
 
-char	*get_buffer(int fd, char *overflow)
+char	*read_str(int fd, char *left_str);
+
+char	*read_str(int fd, char *left_str)
 {
 	char	*buff;
 	int		rd_bytes;
@@ -22,35 +25,36 @@ char	*get_buffer(int fd, char *overflow)
 	if (!buff)
 		return (NULL);
 	rd_bytes = 1;
-	while (!ft_strchr(overflow, '\n') && rd_bytes != 0)
+	while (!ft_strchr(left_str, '\n') && rd_bytes != 0)
 	{
 		rd_bytes = read(fd, buff, BUFFER_SIZE);
-		if (rd_bytes < 0)
+		if (rd_bytes == -1)
 		{
 			free (buff);
 			return (NULL);
 		}
 		buff[rd_bytes] = '\0';
-		overflow = ft_strjoin(overflow, buff);
+		left_str = ft_strjoin(left_str, buff);
 	}
 	free (buff);
-	return (overflow);
+	return (left_str);
 }
 
 char	*get_next_line(int fd)
 {
 	char			*line;
-	static char		*overflow;
+	static char		*left_str;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (0);
-	overflow = get_buffer(fd, overflow);
-	if (!overflow)
+	left_str = read_str(fd, left_str);
+	if (!left_str)
 		return (NULL);
-	line = get_n_cut(overflow);
-	overflow = ow_in_newstr(overflow);
+	line = get_line(left_str);
+	left_str = newleft_str(left_str);
 	return (line);
 }
+
 /*
 int	main(void)
 {
@@ -59,18 +63,17 @@ int	main(void)
 	int		fd1;
 	int		fd2;
 	int		fd3;
-
-	fd1 = open("tests/test1.txt", O_RDONLY);
+	fd1 = open("tests/test.txt", O_RDONLY);
 	fd2 = open("tests/test2.txt", O_RDONLY);
 	fd3 = open("tests/test3.txt", O_RDONLY);
 	i = 1;
-	while (i < 11)
+	while (i < 7)
 	{
 		line = get_next_line(fd1);
-		printf("\n line [%02d]: %s", i, line);
+		printf("line [%02d]: %s", i, line);
 		free(line);
 		line = get_next_line(fd2);
-		printf("\n line [%02d]: %s", i, line);
+		printf("line [%02d]: %s", i, line);
 		free(line);
 		line = get_next_line(fd3);
 		printf("line [%02d]: %s", i, line);
@@ -81,5 +84,4 @@ int	main(void)
 	close(fd2);
 	close(fd3);
 	return (0);
-}
-*/
+}*/
