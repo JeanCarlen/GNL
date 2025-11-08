@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils_bonus.c                       	:+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeancarlen <jeancarlen@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 11:57:46 by jcarlen           #+#    #+#             */
-/*   Updated: 2022/02/11 02:03:23 by jeancarlen       ###   ########.fr       */
+/*   Updated: 2025/11/08 13:53:23 by jeancarlen       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ char *ft_strchr(char *s, int c);
 size_t ft_strlen(char *s);
 
 char *get_line(char *left_str);
-
-static char *left_str[OPEN_MAX];
 
 char *ft_strjoin(char *left_str, char *buff)
 {
