@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                       	:+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeancarlen <jeancarlen@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char *ft_strjoin(char *left_str, char *buff);
 
@@ -20,7 +20,7 @@ size_t ft_strlen(char *s);
 
 char *get_line(char *left_str);
 
-char *newleft_str(char *left_str);
+static char *left_str[OPEN_MAX];
 
 char *ft_strjoin(char *left_str, char *buff)
 {
@@ -109,21 +109,21 @@ char *get_line(char *left_str)
 	return (str);
 }
 
-char	*newleft_str(char *left_str)
+char *newleft_str(char *left_str)
 {
-	int		i;
-	int		j;
-	char	*str;
+	int i;
+	int j;
+	char *str;
 
 	i = 0;
 	while (left_str[i] && left_str[i] != '\n')
 		i++;
 	if (!left_str[i])
 	{
-		free (left_str);
+		free(left_str);
 		return (NULL);
 	}
-	str = (char *)malloc(sizeof(char) * (ft_strlen(left_str) - i)); 
+	str = (char *)malloc(sizeof(char) * (ft_strlen(left_str) - i));
 	if (!str)
 		return (NULL);
 	i++;
@@ -131,6 +131,6 @@ char	*newleft_str(char *left_str)
 	while (left_str[i])
 		str[j++] = left_str[i++];
 	str[j] = '\0';
-	free (left_str);
+	free(left_str);
 	return (str);
 }
