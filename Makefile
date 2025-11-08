@@ -22,7 +22,7 @@ CC = cc
 # Flags de base
 CFLAGS = -Wall -Wextra -Werror
 # Buffer size par défaut
-BS = 1000
+BS = 1
 # On combine les flags de base + le buffer size
 CFLAGS_BASE = $(CFLAGS) -D BUFFER_SIZE=$(BS)
 

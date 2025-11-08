@@ -2,7 +2,6 @@
 #include <fcntl.h>
 #include <string.h>
 
-
 #if BONUS == 1
 # include "get_next_line_bonus.h"
 #else
@@ -44,7 +43,6 @@ int	check_line(char *line, char *expected, const char *test_name)
 	return (pass);
 }
 
-
 int	test_single_fd(void)
 {
 	int		fd;
@@ -69,16 +67,31 @@ int	test_single_fd(void)
 	close(fd);
 
 	tests_ok += check_line(get_next_line(-1), NULL, "FD invalide (-1)"); total_tests++;
-	
+	tests_ok += check_line(get_next_line(99), NULL, "FD non ouvert (99)"); total_tests++;
+
 	printf("\n--- Test STDIN (FD 0) ---\n");
 	printf("Veuillez taper 'bonjour' et appuyer sur Entrée :\n");
 	line = get_next_line(0);
 	tests_ok += check_line(line, "bonjour\n", "STDIN: 'bonjour'"); total_tests++;
 	
+	fd = open("tests/newline.txt", O_RDONLY);
+	if (fd == -1) { printf("Erreur: 'tests/newline.txt' introuvable.\n"); return (0); }
+	tests_ok += check_line(get_next_line(fd), "\n",   "newline.txt: Ligne 1 (\\n)"); total_tests++;
+	tests_ok += check_line(get_next_line(fd), NULL,   "newline.txt: Fin (NULL)"); total_tests++;
+	close(fd);
+
+	fd = open("tests/multi_nl.txt", O_RDONLY);
+	if (fd == -1) { printf("Erreur: 'tests/multi_nl.txt' introuvable.\n"); return (0); }
+	tests_ok += check_line(get_next_line(fd), "ligne 1\n", "multi_nl.txt: Ligne 1"); total_tests++;
+	tests_ok += check_line(get_next_line(fd), "\n",        "multi_nl.txt: Ligne 2 (vide)"); total_tests++;
+	tests_ok += check_line(get_next_line(fd), "\n",        "multi_nl.txt: Ligne 3 (vide)"); total_tests++;
+	tests_ok += check_line(get_next_line(fd), "fin",       "multi_nl.txt: Ligne 4 (sans \\n)"); total_tests++;
+	tests_ok += check_line(get_next_line(fd), NULL,        "multi_nl.txt: Fin (NULL)"); total_tests++;
+	close(fd);
+
 	printf("\n--- Résultat Single FD: %d / %d tests passés ---\n", tests_ok, total_tests);
 	return (tests_ok == total_tests);
 }
-
 
 int	test_multi_fd(void)
 {
