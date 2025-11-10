@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/* */
+/* :::      ::::::::   */
+/* get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
+/* +:+ +:+         +:+     */
+/* By: <auteur>                                   +#+  +:+       +#+        */
+/* +#+#+#+#+#+   +#+           */
+/* Created: 2025/11/10 12:50:00 by <auteur>          #+#    #+#             */
+/* Updated: 2025/11/10 12:50:00 by <auteur>         ###   ########.fr       */
+/* */
+/* ************************************************************************** */
+
 #include "get_next_line_bonus.h"
 
 size_t	ft_strlen(char *s)
@@ -68,62 +80,5 @@ char	*ft_strjoin(char *left_str, char *buff)
 	}
 	ft_perform_copy(str, left_str, buff);
 	free(left_str);
-	return (str);
-}
-
-char	*get_line(char *left_str)
-{
-	int		i;
-	char	*str;
-	int		has_newline;
-	int		j;
-
-	i = 0;
-	if (!left_str[i])
-		return (NULL);
-	while (left_str[i] && left_str[i] != '\n')
-		i++;
-	has_newline = (left_str[i] == '\n');
-	str = (char *)malloc(sizeof(char) * (i + has_newline + 1));
-	if (!str)
-		return (NULL);
-	j = 0;
-	while (j < i + has_newline)
-	{
-		str[j] = left_str[j];
-		j++;
-	}
-	str[j] = '\0';
-	return (str);
-}
-
-char	*newleft_str(char *left_str)
-{
-	int		i;
-	int		j;
-	char	*str;
-	size_t	len;
-
-	i = 0;
-	while (left_str[i] && left_str[i] != '\n')
-		i++;
-	if (!left_str[i])
-	{
-		free (left_str);
-		return (NULL);
-	}
-	len = ft_strlen(left_str);
-	str = (char *)malloc(sizeof(char) * (len - i));
-	if (!str)
-	{
-		free(left_str);
-		return (NULL);
-	}
-	i++;
-	j = 0;
-	while (left_str[i])
-		str[j++] = left_str[i++];
-	str[j] = '\0';
-	free (left_str);
 	return (str);
 }
