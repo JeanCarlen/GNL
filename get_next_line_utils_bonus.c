@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/* */
-/* :::      ::::::::   */
-/* get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
-/* +:+ +:+         +:+     */
-/* By: jeancarlen <jeancarlen@student.42.fr>      +#+  +:+       +#+        */
-/* +#+#+#+#+#+   +#+           */
-/* Created: 2021/11/16 11:57:46 by jcarlen           #+#    #+#             */
-/* Updated: 2025/11/10 12:00:00 by jeancarlen       ###   ########.fr       */
-/* */
-/* ************************************************************************** */
-
 #include "get_next_line_bonus.h"
 
 size_t	ft_strlen(char *s)
@@ -42,10 +30,25 @@ char	*ft_strchr(char *s, int c)
 	return (0);
 }
 
-char	*ft_strjoin(char *left_str, char *buff)
+/*
+** Helper pour ft_strjoin : copie les deux chaînes dans la nouvelle.
+*/
+static void	ft_perform_copy(char *str, char *left_str, char *buff)
 {
 	size_t	i;
 	size_t	j;
+
+	i = -1;
+	j = 0;
+	while (left_str[++i] != '\0')
+		str[i] = left_str[i];
+	while (buff[j] != '\0')
+		str[i++] = buff[j++];
+	str[i] = '\0';
+}
+
+char	*ft_strjoin(char *left_str, char *buff)
+{
 	char	*str;
 
 	if (!left_str)
@@ -57,19 +60,13 @@ char	*ft_strjoin(char *left_str, char *buff)
 	}
 	if (!buff)
 		return (NULL);
-	str = malloc(sizeof(char) * ((ft_strlen(left_str) + ft_strlen(buff)) + 1));
+	str = malloc(sizeof(char) * (ft_strlen(left_str) + ft_strlen(buff) + 1));
 	if (str == NULL)
 	{
 		free(left_str);
 		return (NULL);
 	}
-	i = -1;
-	j = 0;
-	while (left_str[++i] != '\0')
-		str[i] = left_str[i];
-	while (buff[j] != '\0')
-		str[i++] = buff[j++];
-	str[i] = '\0';
+	ft_perform_copy(str, left_str, buff);
 	free(left_str);
 	return (str);
 }
@@ -77,9 +74,9 @@ char	*ft_strjoin(char *left_str, char *buff)
 char	*get_line(char *left_str)
 {
 	int		i;
-	int		j;
 	char	*str;
 	int		has_newline;
+	int		j;
 
 	i = 0;
 	if (!left_str[i])
@@ -91,14 +88,9 @@ char	*get_line(char *left_str)
 	if (!str)
 		return (NULL);
 	j = 0;
-	while (j < i)
+	while (j < i + has_newline)
 	{
 		str[j] = left_str[j];
-		j++;
-	}
-	if (has_newline)
-	{
-		str[j] = '\n';
 		j++;
 	}
 	str[j] = '\0';
@@ -110,6 +102,7 @@ char	*newleft_str(char *left_str)
 	int		i;
 	int		j;
 	char	*str;
+	size_t	len;
 
 	i = 0;
 	while (left_str[i] && left_str[i] != '\n')
@@ -119,7 +112,8 @@ char	*newleft_str(char *left_str)
 		free (left_str);
 		return (NULL);
 	}
-	str = (char *)malloc(sizeof(char) * (ft_strlen(left_str) - i));
+	len = ft_strlen(left_str);
+	str = (char *)malloc(sizeof(char) * (len - i));
 	if (!str)
 	{
 		free(left_str);

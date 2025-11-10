@@ -1,21 +1,29 @@
-/* ************************************************************************** */
-/* */
-/* :::      ::::::::   */
-/* get_next_line.c                                    :+:      :+:    :+:   */
-/* +:+ +:+         +:+     */
-/* By: jeancarlen <jeancarlen@student.42.fr>      +#+  +:+       +#+        */
-/* +#+#+#+#+#+   +#+           */
-/* Created: 2021/11/16 11:57:30 by jcarlen           #+#    #+#             */
-/* Updated: 2025/11/10 12:00:00 by jeancarlen       ###   ########.fr       */
-/* */
-/* ************************************************************************** */
-
 #include "get_next_line.h"
+
+static char	*read_and_join(int fd, char *left_str, char *buff)
+{
+	int	rd_bytes;
+
+	rd_bytes = 1;
+	while (!ft_strchr(left_str, '\n') && rd_bytes != 0)
+	{
+		rd_bytes = read(fd, buff, BUFFER_SIZE);
+		if (rd_bytes == -1)
+		{
+			free(left_str);
+			return (NULL);
+		}
+		buff[rd_bytes] = '\0';
+		left_str = ft_strjoin(left_str, buff);
+		if (!left_str)
+			return (NULL);
+	}
+	return (left_str);
+}
 
 char	*read_str(int fd, char *left_str)
 {
 	char	*buff;
-	int		rd_bytes;
 
 	buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buff)
@@ -23,25 +31,10 @@ char	*read_str(int fd, char *left_str)
 		free(left_str);
 		return (NULL);
 	}
-	rd_bytes = 1;
-	while (!ft_strchr(left_str, '\n') && rd_bytes != 0)
-	{
-		rd_bytes = read(fd, buff, BUFFER_SIZE);
-		if (rd_bytes == -1)
-		{
-			free (buff);
-			free (left_str);
-			return (NULL);
-		}
-		buff[rd_bytes] = '\0';
-		left_str = ft_strjoin(left_str, buff);
-		if (!left_str)
-		{
-			free(buff);
-			return (NULL);
-		}
-	}
-	free (buff);
+	left_str = read_and_join(fd, left_str, buff);
+	free(buff);
+	if (!left_str)
+		return (NULL);
 	return (left_str);
 }
 
