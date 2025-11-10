@@ -1,56 +1,32 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jeancarlen <jeancarlen@student.42.fr>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/16 11:57:46 by jcarlen           #+#    #+#             */
-/*   Updated: 2025/11/08 13:53:23 by jeancarlen       ###   ########.fr       */
-/*                                                                            */
+/* */
+/* :::      ::::::::   */
+/* get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
+/* +:+ +:+         +:+     */
+/* By: jeancarlen <jeancarlen@student.42.fr>      +#+  +:+       +#+        */
+/* +#+#+#+#+#+   +#+           */
+/* Created: 2021/11/16 11:57:46 by jcarlen           #+#    #+#             */
+/* Updated: 2025/11/10 12:00:00 by jeancarlen       ###   ########.fr       */
+/* */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-char *ft_strjoin(char *left_str, char *buff);
-
-char *ft_strchr(char *s, int c);
-
-size_t ft_strlen(char *s);
-
-char *get_line(char *left_str);
-
-char *ft_strjoin(char *left_str, char *buff)
+size_t	ft_strlen(char *s)
 {
-	size_t i;
-	size_t j;
-	char *str;
+	size_t	i;
 
-	if (!left_str)
-	{
-		left_str = (char *)malloc(1 * sizeof(char));
-		left_str[0] = '\0';
-	}
-	if (!left_str || !buff)
-		return (NULL);
-	str = malloc(sizeof(char) * ((ft_strlen(left_str) + ft_strlen(buff)) + 1));
-	if (str == NULL)
-		return (NULL);
-	i = -1;
-	j = 0;
-	if (left_str)
-		while (left_str[++i] != '\0')
-			str[i] = left_str[i];
-	while (buff[j] != '\0')
-		str[i++] = buff[j++];
-	str[i] = '\0';
-	free(left_str);
-	return (str);
+	i = 0;
+	if (!s)
+		return (0);
+	while (s[i] != '\0')
+		i++;
+	return (i);
 }
 
-char *ft_strchr(char *s, int c)
+char	*ft_strchr(char *s, int c)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!s)
@@ -66,33 +42,55 @@ char *ft_strchr(char *s, int c)
 	return (0);
 }
 
-size_t ft_strlen(char *s)
+char	*ft_strjoin(char *left_str, char *buff)
 {
-	size_t i;
+	size_t	i;
+	size_t	j;
+	char	*str;
 
-	i = 0;
-	if (!s)
-		return (0);
-	while (s[i] != '\0')
-		i++;
-	return (i);
+	if (!left_str)
+	{
+		left_str = (char *)malloc(1 * sizeof(char));
+		if (!left_str)
+			return (NULL);
+		left_str[0] = '\0';
+	}
+	if (!buff)
+		return (NULL);
+	str = malloc(sizeof(char) * ((ft_strlen(left_str) + ft_strlen(buff)) + 1));
+	if (str == NULL)
+	{
+		free(left_str);
+		return (NULL);
+	}
+	i = -1;
+	j = 0;
+	while (left_str[++i] != '\0')
+		str[i] = left_str[i];
+	while (buff[j] != '\0')
+		str[i++] = buff[j++];
+	str[i] = '\0';
+	free(left_str);
+	return (str);
 }
 
-char *get_line(char *left_str)
+char	*get_line(char *left_str)
 {
-	int i;
-	char *str;
+	int		i;
+	int		j;
+	char	*str;
+	int		has_newline;
 
 	i = 0;
 	if (!left_str[i])
 		return (NULL);
 	while (left_str[i] && left_str[i] != '\n')
 		i++;
-	int has_newline = (left_str[i] == '\n');
+	has_newline = (left_str[i] == '\n');
 	str = (char *)malloc(sizeof(char) * (i + has_newline + 1));
 	if (!str)
 		return (NULL);
-	int j = 0;
+	j = 0;
 	while (j < i)
 	{
 		str[j] = left_str[j];
@@ -107,28 +105,31 @@ char *get_line(char *left_str)
 	return (str);
 }
 
-char *newleft_str(char *left_str)
+char	*newleft_str(char *left_str)
 {
-	int i;
-	int j;
-	char *str;
+	int		i;
+	int		j;
+	char	*str;
 
 	i = 0;
 	while (left_str[i] && left_str[i] != '\n')
 		i++;
 	if (!left_str[i])
 	{
-		free(left_str);
+		free (left_str);
 		return (NULL);
 	}
 	str = (char *)malloc(sizeof(char) * (ft_strlen(left_str) - i));
 	if (!str)
+	{
+		free(left_str);
 		return (NULL);
+	}
 	i++;
 	j = 0;
 	while (left_str[i])
 		str[j++] = left_str[i++];
 	str[j] = '\0';
-	free(left_str);
+	free (left_str);
 	return (str);
 }
